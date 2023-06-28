@@ -5,5 +5,11 @@ export default defineNuxtConfig({
   app: {
     baseURL: "/spotifycollab/",
   },
+  runtimeConfig: {
+    public: {
+      spotifyClientId: "",
+      spotifyClientSecret: "",
+    },
+  },
   ssr: false,
 });
