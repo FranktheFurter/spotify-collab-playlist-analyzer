@@ -1,6 +1,4 @@
-<!-- UserPanel.vue -->
 <script lang="ts" setup>
-// Define the props
 const props = defineProps({
   userData: Object,
 });
@@ -21,6 +19,4 @@ const props = defineProps({
   </div>
 </template>
 
-<style scoped>
-/* Add any styles specific to this component */
-</style>
+<style scoped></style>

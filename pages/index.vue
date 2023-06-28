@@ -1,8 +1,6 @@
 <script lang="ts" setup>
-import { useSpotifyPlaylistApi } from "@/composables/useSpotifyPlaylistApi"; // Replace with the correct path
-import UserPanel from "@/components/UserPanel.vue"; // Import the UserPanel component
-
-const { playlist, playlistInfo, usersData } = useSpotifyPlaylistApi();
+const { playlist, playlistInfo, usersData, getDisplayNameById } =
+  useSpotifyPlaylistApi();
 </script>
 
 <template>
@@ -25,7 +23,7 @@ const { playlist, playlistInfo, usersData } = useSpotifyPlaylistApi();
       />
     </div>
     <p v-for="(track, index) in playlist" :key="index">
-      {{ track.track.name }} by {{ track.added_by.id }}
+      {{ track.track.name }} by {{ getDisplayNameById(track.added_by.id) }}
     </p>
   </div>
 </template>

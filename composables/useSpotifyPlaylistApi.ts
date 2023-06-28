@@ -85,9 +85,13 @@ export const useSpotifyPlaylistApi = () => {
       );
     }
   };
+  const getDisplayNameById = (userId: string) => {
+    const user = usersData.value.find((user) => user.id === userId);
+    return user ? user.display_name : "";
+  };
 
   // Call fetchData immediately
   fetchData();
 
-  return { playlist, playlistInfo, usersData }; // Return usersData along with playlist and playlistInfo
+  return { playlist, playlistInfo, usersData, getDisplayNameById }; // Return usersData along with playlist and playlistInfo
 };
