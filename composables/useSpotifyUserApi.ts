@@ -2,17 +2,12 @@ import axios from "axios";
 import { ref, watch } from "vue";
 import { useSpotifyAuthToken } from "./useSpotifyAuthToken";
 
-export const useSpotifyUserApi = async (userId: any) => {
+export const useSpotifyUserApi = (userId: any) => {
   const config = useRuntimeConfig();
   const userData = ref<any>(null);
 
   // Use the token from the useSpotifyAuthToken composable
   const { token, getAccessToken } = useSpotifyAuthToken();
-
-  // Wait for the token to be fetched
-  if (token.value === "") {
-    await getAccessToken();
-  }
 
   // Function to get user data
   const getUserData = async (accessToken: string) => {
@@ -31,8 +26,14 @@ export const useSpotifyUserApi = async (userId: any) => {
     }
   };
 
-  // Fetch the user data now that the token is available
-  getUserData(token.value);
+  const fetchData = async () => {
+    if (token.value === "") {
+      await getAccessToken();
+    }
+    getUserData(token.value);
+  };
+
+  fetchData();
 
   return { userData };
 };
