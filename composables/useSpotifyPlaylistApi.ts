@@ -1,12 +1,11 @@
 import axios from "axios";
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue"; // Import computed
 import { useSpotifyAuthToken } from "./useSpotifyAuthToken";
 
 export const useSpotifyPlaylistApi = () => {
-  const config = useRuntimeConfig();
   const playlistId = "0zsrKYsMTsy2Iktc6epKOc";
   const playlist = ref<any[]>([]);
-  const playlistInfo: Ref<any> = ref(null);
+  const playlistInfo = ref<any>(null);
 
   // Use the token from the useSpotifyAuthToken composable
   const { token } = useSpotifyAuthToken();
@@ -55,6 +54,16 @@ export const useSpotifyPlaylistApi = () => {
     }
   };
 
+  // Computed property to get a list of users who added tracks
+  const userList = computed(() => {
+    if (playlist.value) {
+      return Array.from(
+        new Set(playlist.value.map((track) => track.added_by.id))
+      );
+    }
+    return [];
+  });
+
   // Watch the token, and once it's set, fetch the tracks and playlist information
   watch(token, (newTokenValue) => {
     if (newTokenValue) {
@@ -63,5 +72,5 @@ export const useSpotifyPlaylistApi = () => {
     }
   });
 
-  return { playlist, playlistInfo };
+  return { playlist, playlistInfo, userList }; // Include userList in return
 };
