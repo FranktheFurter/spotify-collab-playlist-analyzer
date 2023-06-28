@@ -12,8 +12,6 @@ export const useSpotifyPlaylistApi = () => {
 
   // Function to get the access token
   const getAccessToken = async () => {
-    console.log("Spotify Client ID:", config.public.spotifyClientId);
-    console.log("Spotify Client Secret:", config.public.spotifyClientSecret);
     const authOptions = {
       method: "POST",
       url: "https://accounts.spotify.com/api/token",
