@@ -1,14 +1,19 @@
 import axios from "axios";
-import { ref, watch, computed } from "vue"; // Import computed
+import { ref, computed } from "vue";
 import { useSpotifyAuthToken } from "./useSpotifyAuthToken";
 
-export const useSpotifyPlaylistApi = () => {
+export const useSpotifyPlaylistApi = async () => {
   const playlistId = "0zsrKYsMTsy2Iktc6epKOc";
   const playlist = ref<any[]>([]);
   const playlistInfo = ref<any>(null);
 
   // Use the token from the useSpotifyAuthToken composable
-  const { token } = useSpotifyAuthToken();
+  const { token, getAccessToken } = useSpotifyAuthToken();
+
+  // Wait for the token to be fetched
+  if (token.value === "") {
+    await getAccessToken();
+  }
 
   // Function to get all tracks in the playlist
   const getAllTracks = async (accessToken: string) => {
@@ -54,6 +59,10 @@ export const useSpotifyPlaylistApi = () => {
     }
   };
 
+  // Fetch the tracks and playlist information now that the token is available
+  getAllTracks(token.value);
+  getPlaylistInfo(token.value);
+
   // Computed property to get a list of users who added tracks
   const userList = computed(() => {
     if (playlist.value) {
@@ -62,14 +71,6 @@ export const useSpotifyPlaylistApi = () => {
       );
     }
     return [];
-  });
-
-  // Watch the token, and once it's set, fetch the tracks and playlist information
-  watch(token, (newTokenValue) => {
-    if (newTokenValue) {
-      getAllTracks(newTokenValue);
-      getPlaylistInfo(newTokenValue);
-    }
   });
 
   return { playlist, playlistInfo, userList }; // Include userList in return

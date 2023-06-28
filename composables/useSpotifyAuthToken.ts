@@ -31,5 +31,5 @@ export const useSpotifyAuthToken = () => {
     getAccessToken();
   }
 
-  return { token };
+  return { token, getAccessToken };
 };
