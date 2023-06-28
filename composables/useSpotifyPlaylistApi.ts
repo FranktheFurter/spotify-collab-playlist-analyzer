@@ -1,11 +1,13 @@
 import axios from "axios";
-import { ref, watchEffect, computed } from "vue";
+import { ref, computed } from "vue";
 import { useSpotifyAuthToken } from "./useSpotifyAuthToken";
+import { useSpotifyUserApi } from "./useSpotifyUserApi";
 
 export const useSpotifyPlaylistApi = () => {
   const playlistId = "0zsrKYsMTsy2Iktc6epKOc";
   const playlist = ref<any[]>([]);
   const playlistInfo = ref<any>(null);
+  const usersData = ref<any[]>([]); // Ref to store the users data
 
   // Use the token from the useSpotifyAuthToken composable
   const { token, getAccessToken } = useSpotifyAuthToken();
@@ -54,26 +56,38 @@ export const useSpotifyPlaylistApi = () => {
     }
   };
 
-  // Fetch the tracks and playlist information when the token is available
+  // Fetch the tracks, playlist information, and user data when the token is available
   const fetchData = async () => {
     if (token.value === "") {
       await getAccessToken();
     }
-    getAllTracks(token.value);
-    getPlaylistInfo(token.value);
-  };
+    await getAllTracks(token.value);
+    await getPlaylistInfo(token.value);
 
-  fetchData();
+    // Get unique user IDs
+    const userIds = Array.from(
+      new Set(playlist.value.map((track) => track.added_by.id))
+    );
 
-  // Computed property to get a list of users who added tracks
-  const userList = computed(() => {
-    if (playlist.value) {
-      return Array.from(
-        new Set(playlist.value.map((track) => track.added_by.id))
+    // Fetch user data for each user ID
+    for (let userId of userIds) {
+      const { userData } = useSpotifyUserApi(userId);
+
+      // Watch for changes in userData, and push to usersData once it's populated
+      watch(
+        () => userData.value,
+        (newVal) => {
+          if (newVal) {
+            usersData.value.push(newVal);
+          }
+        },
+        { immediate: true }
       );
     }
-    return [];
-  });
+  };
 
-  return { playlist, playlistInfo, userList };
+  // Call fetchData immediately
+  fetchData();
+
+  return { playlist, playlistInfo, usersData }; // Return usersData along with playlist and playlistInfo
 };

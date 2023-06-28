@@ -2,7 +2,7 @@
 import { useSpotifyPlaylistApi } from "@/composables/useSpotifyPlaylistApi"; // Replace with the correct path
 import UserPanel from "@/components/UserPanel.vue"; // Import the UserPanel component
 
-const { playlist, playlistInfo, userList } = useSpotifyPlaylistApi();
+const { playlist, playlistInfo, usersData } = useSpotifyPlaylistApi();
 </script>
 
 <template>
@@ -19,9 +19,9 @@ const { playlist, playlistInfo, userList } = useSpotifyPlaylistApi();
     <h2>{{ playlistInfo.description }}</h2>
     <div class="flex flex-wrap gap-8">
       <UserPanel
-        v-for="(user, index) in userList"
+        v-for="(user, index) in usersData"
         :key="index"
-        :user-id="user"
+        :user-data="user"
       />
     </div>
     <p v-for="(track, index) in playlist" :key="index">
