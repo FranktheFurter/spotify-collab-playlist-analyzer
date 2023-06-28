@@ -3,7 +3,7 @@
 export default defineNuxtConfig({
   modules: ["@unocss/nuxt", "@vueuse/nuxt"],
   app: {
-    baseURL: "/spotifycollab/",
+    baseURL: "/spotify-collab-playlist-analyzer/",
   },
   runtimeConfig: {
     public: {
