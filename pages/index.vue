@@ -1,6 +1,13 @@
 <script lang="ts" setup>
-const { playlist, playlistInfo, usersData, getDisplayNameById } =
-  useSpotifyPlaylistApi();
+const {
+  playlist,
+  playlistInfo,
+  usersData,
+  getDisplayNameById,
+  getTracksCountByUserId,
+  getTotalTrackDurationByUserId,
+  getTracksDurationInPercentageByUserId,
+} = useSpotifyPlaylistApi();
 </script>
 
 <template>
@@ -20,11 +27,17 @@ const { playlist, playlistInfo, usersData, getDisplayNameById } =
         v-for="(user, index) in usersData"
         :key="index"
         :user-data="user"
+        :count="getTracksCountByUserId(user.id)"
+        :duration="getTotalTrackDurationByUserId(user.id)"
+        :duration-percent="getTracksDurationInPercentageByUserId(user.id)"
       />
     </div>
-    <p v-for="(track, index) in playlist" :key="index">
-      {{ track.track.name }} by {{ getDisplayNameById(track.added_by.id) }}
-    </p>
+    <div class="py-4">
+      <h3 class="">Tracklist:</h3>
+      <p v-for="(track, index) in playlist" :key="index">
+        {{ track.track.name }} by {{ getDisplayNameById(track.added_by.id) }}
+      </p>
+    </div>
   </div>
 </template>
 
