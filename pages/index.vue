@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-const playlist = useSpotifyPlaylistApi();
+const { playlist } = useSpotifyPlaylistApi();
 </script>
 
 <template>

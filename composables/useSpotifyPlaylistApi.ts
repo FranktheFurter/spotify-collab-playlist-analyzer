@@ -1,36 +1,17 @@
 import axios from "axios";
-import { ref } from "vue";
+import { ref, watch } from "vue";
+import { useSpotifyAuthToken } from "./useSpotifyAuthToken";
 
 export const useSpotifyPlaylistApi = () => {
   const config = useRuntimeConfig();
-
   const playlistId = "0zsrKYsMTsy2Iktc6epKOc";
-  const clientId = config.public.spotifyClientId;
-  const clientSecret = config.public.spotifyClientSecret;
   const playlist = ref<any[]>([]);
-  const token = ref("");
 
-  // Function to get the access token
-  const getAccessToken = async () => {
-    const authOptions = {
-      method: "POST",
-      url: "https://accounts.spotify.com/api/token",
-      headers: {
-        Authorization: "Basic " + btoa(clientId + ":" + clientSecret),
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      data: "grant_type=client_credentials",
-    };
-    try {
-      const response = await axios(authOptions);
-      token.value = response.data.access_token;
-    } catch (error) {
-      console.error("Error getting access token", error);
-    }
-  };
+  // Use the token from the useSpotifyAuthToken composable
+  const { token } = useSpotifyAuthToken();
 
   // Function to get all tracks in the playlist
-  const getAllTracks = async () => {
+  const getAllTracks = async (accessToken: string) => {
     let offset = 0;
     let total = null;
     const allTracks = [];
@@ -40,7 +21,7 @@ export const useSpotifyPlaylistApi = () => {
         method: "get",
         url: `https://api.spotify.com/v1/playlists/${playlistId}/tracks?offset=${offset}`,
         headers: {
-          Authorization: `Bearer ${token.value}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       try {
@@ -53,23 +34,15 @@ export const useSpotifyPlaylistApi = () => {
       }
     } while (offset < total);
 
-    return allTracks;
+    playlist.value = allTracks;
   };
 
-  // Function to get the playlist using the access token
-  const getPlaylist = async () => {
-    if (!token.value) {
-      await getAccessToken();
+  // Watch the token, and once it's set, fetch the tracks
+  watch(token, (newTokenValue) => {
+    if (newTokenValue) {
+      getAllTracks(newTokenValue);
     }
-    try {
-      playlist.value = await getAllTracks();
-    } catch (error) {
-      console.error("Error getting playlist", error);
-    }
-  };
+  });
 
-  // Immediately invoke the function to get the playlist when the component is created
-  getPlaylist();
-
-  return playlist;
+  return { playlist };
 };
