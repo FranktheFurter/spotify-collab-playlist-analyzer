@@ -53,6 +53,10 @@ export const useSpotifyPlaylistApi = (playlistId: string | null = null) => {
   }
 
   const fetchData = async () => {
+    playlist.value = []
+    playlistInfo.value = []
+    usersData.value = []
+
     if (token.value === "") {
       await getAccessToken()
     }
