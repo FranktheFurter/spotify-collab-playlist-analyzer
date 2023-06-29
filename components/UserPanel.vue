@@ -3,6 +3,7 @@ const {
   getTotalTrackDurationByUserId,
   getTracksCountByUserId,
   getTracksDurationInPercentageByUserId,
+  getAverageTrackPopularityByUserId,
 } = useSpotifyPlaylistDataHelper()
 
 const { msToTime } = useFormatHelper()
@@ -15,6 +16,7 @@ const uId = props.userData!.id
 const count = getTracksCountByUserId(uId)
 const durationPercent = getTracksDurationInPercentageByUserId(uId)
 const duration = getTotalTrackDurationByUserId(uId)
+const avgPopularity = getAverageTrackPopularityByUserId(uId)
 
 const formattedDuration = computed(() => msToTime(duration))
 </script>
@@ -34,6 +36,7 @@ const formattedDuration = computed(() => msToTime(duration))
     <div>{{ count }}</div>
     <div>{{ formattedDuration }}</div>
     <div>{{ durationPercent?.toFixed(2) }} % Playtime</div>
+    <div>{{ avgPopularity?.toFixed(0) }} popularity</div>
   </div>
 </template>
 

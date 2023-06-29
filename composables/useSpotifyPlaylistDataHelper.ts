@@ -30,6 +30,22 @@ export const useSpotifyPlaylistDataHelper = () => {
     )
     return (userTrackDuration / totalTrackDuration) * 100
   }
+  const getAverageTrackPopularityByUserId = (userId: string) => {
+    const userTracks = playlist.value.filter(
+      (track) => track.added_by.id === userId
+    )
+
+    if (userTracks.length === 0) {
+      return 0
+    }
+
+    const totalPopularity = userTracks.reduce(
+      (sum, track) => sum + track.track.popularity,
+      0
+    )
+
+    return totalPopularity / userTracks.length
+  }
 
   return {
     getDisplayNameById,
@@ -37,5 +53,6 @@ export const useSpotifyPlaylistDataHelper = () => {
     getTotalTrackDurationByUserId,
     getTracksDurationInPercentageByUserId,
     getTotalPlaylistDuration,
+    getAverageTrackPopularityByUserId,
   }
 }
