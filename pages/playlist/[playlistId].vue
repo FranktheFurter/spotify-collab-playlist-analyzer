@@ -2,6 +2,7 @@
 const route = useRoute()
 const playlistId = route.params.playlistId as string
 const { playlist, playlistInfo, usersData } = useSpotifyPlaylistApi(playlistId)
+const { getDisplayNameById } = useSpotifyPlaylistDataHelper()
 </script>
 
 <template>
@@ -26,7 +27,7 @@ const { playlist, playlistInfo, usersData } = useSpotifyPlaylistApi(playlistId)
     <div class="py-4">
       <h3 class="">Tracklist:</h3>
       <p v-for="(track, index) in playlist" :key="index">
-        {{ track.track.name }} by {{ track.added_by.id }}
+        {{ track.track.name }} by {{ getDisplayNameById(track.added_by.id) }}
       </p>
     </div>
   </div>
