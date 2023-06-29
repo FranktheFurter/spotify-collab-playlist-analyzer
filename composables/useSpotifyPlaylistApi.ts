@@ -13,7 +13,6 @@ export const useSpotifyPlaylistApi = (playlistId: string | null = null) => {
   const getAllTracks = async (accessToken: string) => {
     let offset = 0
     let total = null
-    const allTracks = []
 
     do {
       const config = {
@@ -25,15 +24,13 @@ export const useSpotifyPlaylistApi = (playlistId: string | null = null) => {
       }
       try {
         const response = await axios(config)
-        allTracks.push(...response.data.items)
+        playlist.value.push(...response.data.items)
         total = response.data.total
         offset += response.data.items.length
       } catch (error) {
         console.error("Error getting tracks", error)
       }
     } while (offset < total)
-
-    playlist.value = allTracks
   }
 
   const getPlaylistInfo = async (accessToken: string) => {
@@ -60,8 +57,8 @@ export const useSpotifyPlaylistApi = (playlistId: string | null = null) => {
     if (token.value === "") {
       await getAccessToken()
     }
+    getPlaylistInfo(token.value)
     await getAllTracks(token.value)
-    await getPlaylistInfo(token.value)
 
     // Get unique user IDs
     const userIds = Array.from(
