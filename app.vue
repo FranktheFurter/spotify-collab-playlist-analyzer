@@ -1,5 +1,8 @@
+<script setup lang="ts">
+const { token } = useSpotifyAuthToken()
+</script>
 <template>
-  <div class="mx-4 min-h-100vh">
+  <div v-if="token" class="mx-4">
     <NuxtPage />
   </div>
 </template>
