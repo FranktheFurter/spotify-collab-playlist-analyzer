@@ -4,7 +4,7 @@ const { getDisplayNameById } = useSpotifyPlaylistDataHelper()
 </script>
 
 <template>
-  <div v-if="playlist" class="grid grid-cols-8 gap-8">
+  <div v-if="playlist" class="grid grid-cols-8 gap-8 px-8">
     <div
       v-for="(track, index) in playlist"
       :key="index"
