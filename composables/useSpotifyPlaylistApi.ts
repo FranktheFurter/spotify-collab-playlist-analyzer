@@ -1,22 +1,22 @@
-import axios from "axios";
-import { ref, computed } from "vue";
-import { useSpotifyAuthToken } from "./useSpotifyAuthToken";
-import { useSpotifyUserApi } from "./useSpotifyUserApi";
+import axios from "axios"
+import { ref, computed } from "vue"
+import { useSpotifyAuthToken } from "./useSpotifyAuthToken"
+import { useSpotifyUserApi } from "./useSpotifyUserApi"
 
-export const useSpotifyPlaylistApi = () => {
-  const playlistId = "0zsrKYsMTsy2Iktc6epKOc";
-  const playlist = ref<any[]>([]);
-  const playlistInfo = ref<any>(null);
-  const usersData = ref<any[]>([]); // Ref to store the users data
+export const useSpotifyPlaylistApi = (playlistId: string) => {
+  // const playlistId = "0zsrKYsMTsy2Iktc6epKOc"
+  const playlist = ref<any[]>([])
+  const playlistInfo = ref<any>(null)
+  const usersData = ref<any[]>([]) // Ref to store the users data
 
   // Use the token from the useSpotifyAuthToken composable
-  const { token, getAccessToken } = useSpotifyAuthToken();
+  const { token, getAccessToken } = useSpotifyAuthToken()
 
   // Function to get all tracks in the playlist
   const getAllTracks = async (accessToken: string) => {
-    let offset = 0;
-    let total = null;
-    const allTracks = [];
+    let offset = 0
+    let total = null
+    const allTracks = []
 
     do {
       const config = {
@@ -25,19 +25,19 @@ export const useSpotifyPlaylistApi = () => {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      };
-      try {
-        const response = await axios(config);
-        allTracks.push(...response.data.items);
-        total = response.data.total;
-        offset += response.data.items.length;
-      } catch (error) {
-        console.error("Error getting tracks", error);
       }
-    } while (offset < total);
+      try {
+        const response = await axios(config)
+        allTracks.push(...response.data.items)
+        total = response.data.total
+        offset += response.data.items.length
+      } catch (error) {
+        console.error("Error getting tracks", error)
+      }
+    } while (offset < total)
 
-    playlist.value = allTracks;
-  };
+    playlist.value = allTracks
+  }
 
   // Function to get playlist information
   const getPlaylistInfo = async (accessToken: string) => {
@@ -47,70 +47,69 @@ export const useSpotifyPlaylistApi = () => {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
-    };
-    try {
-      const response = await axios(config);
-      playlistInfo.value = response.data;
-    } catch (error) {
-      console.error("Error getting playlist information", error);
     }
-  };
+    try {
+      const response = await axios(config)
+      playlistInfo.value = response.data
+    } catch (error) {
+      console.error("Error getting playlist information", error)
+    }
+  }
 
   // Fetch the tracks, playlist information, and user data when the token is available
   const fetchData = async () => {
     if (token.value === "") {
-      await getAccessToken();
+      await getAccessToken()
     }
-    await getAllTracks(token.value);
-    await getPlaylistInfo(token.value);
+    await getAllTracks(token.value)
+    await getPlaylistInfo(token.value)
 
     // Get unique user IDs
     const userIds = Array.from(
       new Set(playlist.value.map((track) => track.added_by.id))
-    );
+    )
 
     // Fetch user data for each user ID
     for (let userId of userIds) {
-      const { userData } = useSpotifyUserApi(userId);
+      const { userData } = useSpotifyUserApi(userId)
 
       // Watch for changes in userData, and push to usersData once it's populated
       watch(
         () => userData.value,
         (newVal) => {
           if (newVal) {
-            usersData.value.push(newVal);
+            usersData.value.push(newVal)
           }
         },
         { immediate: true }
-      );
+      )
     }
-  };
+  }
   const getDisplayNameById = (userId: string) => {
-    const user = usersData.value.find((user) => user.id === userId);
-    return user ? user.display_name : "";
-  };
+    const user = usersData.value.find((user) => user.id === userId)
+    return user ? user.display_name : ""
+  }
 
   const getTracksCountByUserId = (userId: string) => {
-    return playlist.value.filter((track) => track.added_by.id === userId)
-      .length;
-  };
+    return playlist.value.filter((track) => track.added_by.id === userId).length
+  }
   const getTotalTrackDurationByUserId = (userId: string) => {
     return playlist.value
       .filter((track) => track.added_by.id === userId)
-      .reduce((sum, track) => sum + track.track.duration_ms, 0);
-  };
+      .reduce((sum, track) => sum + track.track.duration_ms, 0)
+  }
 
   const getTracksDurationInPercentageByUserId = (userId: string) => {
-    const userTrackDuration = getTotalTrackDurationByUserId(userId);
+    const userTrackDuration = getTotalTrackDurationByUserId(userId)
     const totalTrackDuration = playlist.value.reduce(
       (sum, track) => sum + track.track.duration_ms,
       0
-    );
-    return (userTrackDuration / totalTrackDuration) * 100;
-  };
+    )
+    return (userTrackDuration / totalTrackDuration) * 100
+  }
 
   // Call fetchData immediately
-  fetchData();
+  fetchData()
 
   return {
     playlist,
@@ -120,5 +119,5 @@ export const useSpotifyPlaylistApi = () => {
     getTracksCountByUserId,
     getTotalTrackDurationByUserId,
     getTracksDurationInPercentageByUserId,
-  };
-};
+  }
+}
