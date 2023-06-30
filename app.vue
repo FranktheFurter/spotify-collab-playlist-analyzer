@@ -10,6 +10,8 @@ const { token } = useSpotifyAuthToken()
 /* css resets and other global styles*/
 body {
   margin: 0;
-  @apply font-comfortaa bg-black text-white;
+  font-family: "Roboto", sans-serif;
+  background-color: black;
+  color: white;
 }
 </style>
