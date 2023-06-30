@@ -1,36 +1,19 @@
-import axios from "axios"
-import { ref, computed, watch } from "vue"
-import { useSpotifyAuthToken } from "./useSpotifyAuthToken"
-import { useSpotifyUserApi } from "./useSpotifyUserApi"
+import axios from "axios";
+import { ref, computed } from "vue";
+import { useSpotifyAuthToken } from "./useSpotifyAuthToken";
+import { useSpotifyUserApi } from "./useSpotifyUserApi";
 
-const playlist = ref<any[]>([])
-const playlistInfo = ref<any>(null)
-const usersData = ref<any[]>([])
-const userIds = ref<Set<string>>(new Set())
+const playlist = ref<any[]>([]);
+const playlistInfo = ref<any>(null);
+const usersData = ref<any[]>([]);
 
 export const useSpotifyPlaylistApi = (playlistId: string | null = null) => {
-  const { token, getAccessToken } = useSpotifyAuthToken()
-
-  const fetchUser = async (id: string) => {
-    if (userIds.value.has(id)) {
-      return
-    }
-    userIds.value.add(id)
-    const { userData } = useSpotifyUserApi(id)
-    watch(
-      () => userData.value,
-      (newVal) => {
-        if (newVal) {
-          usersData.value.push(newVal)
-        }
-      },
-      { immediate: true }
-    )
-  }
+  const { token, getAccessToken } = useSpotifyAuthToken();
 
   const getAllTracks = async (accessToken: string) => {
-    let offset = 0
-    let total = null
+    let offset = 0;
+    let total = null;
+
     do {
       const config = {
         method: "get",
@@ -38,16 +21,17 @@ export const useSpotifyPlaylistApi = (playlistId: string | null = null) => {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
+      };
+      try {
+        const response = await axios(config);
+        playlist.value.push(...response.data.items);
+        total = response.data.total;
+        offset += response.data.items.length;
+      } catch (error) {
+        console.error("Error getting tracks", error);
       }
-      const response = await axios(config)
-      playlist.value.push(...response.data.items)
-      total = response.data.total
-      offset += response.data.items.length
-      for (let track of response.data.items) {
-        fetchUser(track.added_by.id)
-      }
-    } while (offset < total)
-  }
+    } while (offset < total);
+  };
 
   const getPlaylistInfo = async (accessToken: string) => {
     const config = {
@@ -56,31 +40,55 @@ export const useSpotifyPlaylistApi = (playlistId: string | null = null) => {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
+    };
+    try {
+      const response = await axios(config);
+      playlistInfo.value = response.data;
+    } catch (error) {
+      console.error("Error getting playlist information", error);
     }
-    const response = await axios(config)
-    playlistInfo.value = response.data
-  }
+  };
 
   const fetchData = async () => {
-    playlist.value = []
-    playlistInfo.value = []
-    usersData.value = []
-    userIds.value = new Set()
+    playlist.value = [];
+    playlistInfo.value = [];
+    usersData.value = [];
 
     if (token.value === "") {
-      await getAccessToken()
+      await getAccessToken();
     }
-    getPlaylistInfo(token.value)
-    await getAllTracks(token.value)
-  }
+    getPlaylistInfo(token.value);
+    await getAllTracks(token.value);
+
+    // Get unique user IDs
+    const userIds = Array.from(
+      new Set(playlist.value.map((track) => track.added_by.id))
+    );
+
+    // Fetch user data for each user ID
+    for (let userId of userIds) {
+      const { userData } = useSpotifyUserApi(userId);
+
+      // Watch for changes in userData, and push to usersData once it's populated
+      watch(
+        () => userData.value,
+        (newVal) => {
+          if (newVal) {
+            usersData.value.push(newVal);
+          }
+        },
+        { immediate: true }
+      );
+    }
+  };
 
   if (playlistId) {
-    fetchData()
+    fetchData();
   }
 
   return {
     playlist,
     playlistInfo,
     usersData,
-  }
-}
+  };
+};
