@@ -7,15 +7,9 @@ const { getDisplayNameById } = useSpotifyPlaylistDataHelper()
 
 <template>
   <div>
-    <div v-if="playlistInfo" class="py-32 flex flex-col items-center">
+    <div class="">
       <PlaylistInfo />
-      <div class="flex flex-wrap gap-8">
-        <UserPanel
-          v-for="(user, index) in usersData"
-          :key="index"
-          :user-data="user"
-        />
-      </div>
+      <Users />
       <div class="py-4">
         <TrackList />
       </div>

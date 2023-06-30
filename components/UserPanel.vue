@@ -22,21 +22,24 @@ const formattedDuration = computed(() => msToTime(duration))
 </script>
 
 <template>
-  <div v-if="userData" class="flex flex-col items-center gap-1">
+  <div
+    v-if="userData"
+    class="flex flex-col items-center gap-1 border-gray/20 border-solid border-rounded-xl p-4"
+  >
     <img
       v-if="userData.images && userData.images.length > 0"
       class="rounded-full"
       :src="userData.images[0].url"
       alt="User profile image"
-      width="30"
-      height="30"
+      width="60"
+      height="60"
     />
-    <div v-else class="w-30px h-30px bg-gray rounded-full"></div>
-    <div>{{ userData.display_name }}</div>
-    <div>{{ count }}</div>
-    <div>{{ formattedDuration }}</div>
-    <div>{{ durationPercent?.toFixed(2) }} % Playtime</div>
-    <div>{{ avgPopularity?.toFixed(0) }} popularity</div>
+    <div v-else class="w-60px h-60px bg-gray rounded-full"></div>
+    <div class="mt-2">{{ userData.display_name }}</div>
+    <div class="opacity-80">{{ count }}</div>
+    <div class="opacity-80">{{ formattedDuration }}</div>
+    <div class="opacity-80">{{ durationPercent?.toFixed(2) }} % Playtime</div>
+    <div class="opacity-80">{{ avgPopularity?.toFixed(0) }} popularity</div>
   </div>
 </template>
 
