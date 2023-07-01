@@ -1,13 +1,13 @@
-import axios from "axios";
-import { ref, watch } from "vue";
-import { useSpotifyAuthToken } from "./useSpotifyAuthToken";
+import axios from "axios"
+import { ref, watch } from "vue"
+import { useSpotifyAuthToken } from "./useSpotifyAuthToken"
 
 export const useSpotifyUserApi = (userId: any) => {
-  const config = useRuntimeConfig();
-  const userData = ref<any>(null);
+  const config = useRuntimeConfig()
+  const userData = ref<any>(null)
 
   // Use the token from the useSpotifyAuthToken composable
-  const { token, getAccessToken } = useSpotifyAuthToken();
+  const { token, getAccessToken } = useSpotifyAuthToken()
 
   // Function to get user data
   const getUserData = async (accessToken: string) => {
@@ -17,23 +17,23 @@ export const useSpotifyUserApi = (userId: any) => {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
-    };
-    try {
-      const response = await axios(config);
-      userData.value = response.data;
-    } catch (error) {
-      console.error("Error getting user data", error);
     }
-  };
+    try {
+      const response = await axios(config)
+      userData.value = response.data
+    } catch (error) {
+      console.error("Error getting user data", error)
+    }
+  }
 
   const fetchData = async () => {
     if (token.value === "") {
-      await getAccessToken();
+      await getAccessToken()
     }
-    getUserData(token.value);
-  };
+    getUserData(token.value)
+  }
 
-  fetchData();
+  fetchData()
 
-  return { userData };
-};
+  return { userData }
+}
