@@ -10,9 +10,30 @@ const getArtistNames = (artists: any[]) => {
 <template>
   <div
     v-if="playlist"
-    class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-8 container mx-auto"
+    class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-2 md:gap-4 container mx-auto"
   >
     <div
+      v-for="(track, index) in playlist"
+      :key="index"
+      class="w-100% flex md:flex-col bg-opacity-10"
+    >
+      <nuxt-img
+        v-if="track.track.album.images && track.track.album.images[0]"
+        :src="track.track.album.images[0].url"
+        alt="cover"
+        loading="lazy"
+        class="object-contain w-20 md:w-100% aspect-1/1"
+      />
+      <div
+        class="px-2 text-white/80 text-xs backdrop-blur-2xl border-solid border-white/20 w-100% md:w-unset"
+      >
+        <p class="line-clamp-1">
+          {{ track.track.name }}
+        </p>
+        <p class="line-clamp-1">{{ getArtistNames(track.track.artists) }}</p>
+      </div>
+    </div>
+    <!-- <div
       v-for="(track, index) in playlist"
       :key="index"
       class="aspect-1/1 bg-gray/20 w-100%"
@@ -30,7 +51,7 @@ const getArtistNames = (artists: any[]) => {
         </p>
         <p class="line-clamp-1">{{ getArtistNames(track.track.artists) }}</p>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
