@@ -11,5 +11,5 @@ export default defineNuxtConfig({
       spotifyClientSecret: "",
     },
   },
-  ssr: false,
+  ssr: true,
 })
