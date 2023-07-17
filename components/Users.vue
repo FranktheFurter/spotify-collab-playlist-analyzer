@@ -1,5 +1,10 @@
 <script lang="ts" setup>
 const { usersData } = useSpotifyPlaylistApi()
+const {
+  getDisplayNameById,
+  getUserIdWithMostTracks,
+  getUserIdWithLeastTracks,
+} = useSpotifyPlaylistDataHelper()
 </script>
 
 <template>
@@ -15,6 +20,22 @@ const { usersData } = useSpotifyPlaylistApi()
   </div>
   <div class="container mx-auto">
     <h2>Awards:</h2>
+    <h3>Most Tracks:</h3>
+    <p>
+      {{
+        getUserIdWithMostTracks
+          ? getDisplayNameById(getUserIdWithMostTracks)
+          : "No user found"
+      }}
+    </p>
+    <h3>Least Tracks:</h3>
+    <p>
+      {{
+        getUserIdWithLeastTracks
+          ? getDisplayNameById(getUserIdWithLeastTracks)
+          : "No user found"
+      }}
+    </p>
   </div>
 </template>
 

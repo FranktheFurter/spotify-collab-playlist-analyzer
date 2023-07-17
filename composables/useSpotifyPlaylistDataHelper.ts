@@ -47,44 +47,56 @@ export const useSpotifyPlaylistDataHelper = () => {
     return totalPopularity / userTracks.length
   }
 
-  const usersWithTracks = computed(() => {
-    return playlist.value.reduce((users, track) => {
-      const userId = track.added_by.id
-      users[userId] = (users[userId] || 0) + 1
-      return users
-    }, {})
-  })
-
-  const getUserWithMostTracks = computed(() => {
-    const users = usersWithTracks.value
-    const userIdWithMostTracks = Object.keys(users).reduce((a, b) =>
-      users[a] > users[b] ? a : b
+  const getUserIdWithMostTracks = computed(() => {
+    const userIdToTrackCountMap = playlist.value.reduce(
+      (accumulator, track) => {
+        if (accumulator[track.added_by.id]) {
+          accumulator[track.added_by.id] += 1
+        } else {
+          accumulator[track.added_by.id] = 1
+        }
+        return accumulator
+      },
+      {}
     )
 
-    return getDisplayNameById(userIdWithMostTracks)
+    let userIdWithMostTracks = null
+    let mostTracks = 0
+
+    for (const userId in userIdToTrackCountMap) {
+      if (userIdToTrackCountMap[userId] > mostTracks) {
+        mostTracks = userIdToTrackCountMap[userId]
+        userIdWithMostTracks = userId
+      }
+    }
+
+    return userIdWithMostTracks
   })
 
-  const getUserWithLeastTracks = computed(() => {
-    const users = usersWithTracks.value
-    const userIdWithLeastTracks = Object.keys(users).reduce((a, b) =>
-      users[a] < users[b] ? a : b
+  const getUserIdWithLeastTracks = computed(() => {
+    const userIdToTrackCountMap = playlist.value.reduce(
+      (accumulator, track) => {
+        if (accumulator[track.added_by.id]) {
+          accumulator[track.added_by.id] += 1
+        } else {
+          accumulator[track.added_by.id] = 1
+        }
+        return accumulator
+      },
+      {}
     )
 
-    return getDisplayNameById(userIdWithLeastTracks)
-  })
-  const getUserWithMostPopularity = computed(() => {
-    const users = usersWithTracks.value
-    const userIdWithMostPopularity = Object.keys(users).reduce((a, b) =>
-      users[a] > users[b] ? a : b
-    )
-    return getDisplayNameById(userIdWithMostPopularity)
-  })
-  const getUsersWithLeastPopularity = computed(() => {
-    const users = usersWithTracks.value
-    const userIdWithLeastPopularity = Object.keys(users).reduce((a, b) =>
-      users[a] < users[b] ? a : b
-    )
-    return getDisplayNameById(userIdWithLeastPopularity)
+    let userIdWithLeastTracks = null
+    let leastTracks = Infinity
+
+    for (const userId in userIdToTrackCountMap) {
+      if (userIdToTrackCountMap[userId] < leastTracks) {
+        leastTracks = userIdToTrackCountMap[userId]
+        userIdWithLeastTracks = userId
+      }
+    }
+
+    return userIdWithLeastTracks
   })
 
   return {
@@ -94,7 +106,7 @@ export const useSpotifyPlaylistDataHelper = () => {
     getTracksDurationInPercentageByUserId,
     getTotalPlaylistDuration,
     getAverageTrackPopularityByUserId,
-    getUserWithMostTracks,
-    getUserWithLeastTracks,
+    getUserIdWithMostTracks,
+    getUserIdWithLeastTracks,
   }
 }
