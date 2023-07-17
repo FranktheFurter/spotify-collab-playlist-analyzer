@@ -7,7 +7,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "deploy": "nuxt generate && touch .output/public/.nojekyll && gh-pages --dotfiles -d .output/public"
+    "deploy": "nuxt generate && node touch.js .output/public/.nojekyll && gh-pages --dotfiles -d .output/public"
   },
   "devDependencies": {
     "@nuxt/image": "^1.0.0-rc.1",
