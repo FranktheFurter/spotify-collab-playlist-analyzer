@@ -11,7 +11,9 @@ const {
   <div class="container mx-auto">
     <h2>Teilnehmer</h2>
   </div>
-  <div class="container mx-auto flex flex-wrap gap-4 py-8">
+  <div
+    class="container mx-auto grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4 py-8"
+  >
     <UserPanel
       v-for="(user, index) in usersData"
       :key="index"
