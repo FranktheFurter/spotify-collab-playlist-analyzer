@@ -4,6 +4,8 @@ const {
   getDisplayNameById,
   getUserIdWithMostTracks,
   getUserIdWithLeastTracks,
+  getUserIdWithLongestTrack,
+  getUserIdWithShortestTrack,
 } = useSpotifyPlaylistDataHelper()
 </script>
 
@@ -21,7 +23,7 @@ const {
     />
   </div>
   <div class="container mx-auto">
-    <h2>Awards:</h2>
+    <h2>User Awards:</h2>
     <h3>Most Tracks:</h3>
     <p>
       {{
@@ -35,6 +37,22 @@ const {
       {{
         getUserIdWithLeastTracks
           ? getDisplayNameById(getUserIdWithLeastTracks)
+          : "No user found"
+      }}
+    </p>
+    <h3>Longest Track:</h3>
+    <p>
+      {{
+        getUserIdWithLeastTracks
+          ? getDisplayNameById(getUserIdWithLongestTrack)
+          : "No user found"
+      }}
+    </p>
+    <h3>Shortest Track:</h3>
+    <p>
+      {{
+        getUserIdWithLeastTracks
+          ? getDisplayNameById(getUserIdWithShortestTrack)
           : "No user found"
       }}
     </p>

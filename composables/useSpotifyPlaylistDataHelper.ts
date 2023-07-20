@@ -99,6 +99,33 @@ export const useSpotifyPlaylistDataHelper = () => {
     return userIdWithLeastTracks
   })
 
+  const getUserIdWithLongestTrack = computed(() => {
+    let userIdWithLongestTrack = ""
+    let longestTrackDuration = 0
+
+    playlist.value.forEach((track) => {
+      if (track.track.duration_ms > longestTrackDuration) {
+        longestTrackDuration = track.track.duration_ms
+        userIdWithLongestTrack = track.added_by.id
+      }
+    })
+
+    return userIdWithLongestTrack
+  })
+  const getUserIdWithShortestTrack = computed(() => {
+    let userIdWithShortestTrack = ""
+    let shortestTrackDuration = Infinity
+
+    playlist.value.forEach((track) => {
+      if (track.track.duration_ms < shortestTrackDuration) {
+        shortestTrackDuration = track.track.duration_ms
+        userIdWithShortestTrack = track.added_by.id
+      }
+    })
+
+    return userIdWithShortestTrack
+  })
+
   return {
     getDisplayNameById,
     getTracksCountByUserId,
@@ -108,5 +135,7 @@ export const useSpotifyPlaylistDataHelper = () => {
     getAverageTrackPopularityByUserId,
     getUserIdWithMostTracks,
     getUserIdWithLeastTracks,
+    getUserIdWithLongestTrack,
+    getUserIdWithShortestTrack,
   }
 }
