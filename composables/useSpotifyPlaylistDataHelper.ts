@@ -145,6 +145,50 @@ export const useSpotifyPlaylistDataHelper = () => {
     }
   })
 
+  const getUserWithMostPopularTrack = computed(() => {
+    let userIdWithMostPopularTrack = ""
+    let mostPopularTrack: any = null
+
+    playlist.value.forEach((track) => {
+      if (
+        track.track.popularity >
+        (mostPopularTrack ? mostPopularTrack.track.popularity : -Infinity)
+      ) {
+        mostPopularTrack = track
+        userIdWithMostPopularTrack = track.added_by.id
+      }
+    })
+
+    return {
+      user: usersData.value.find(
+        (user) => user.id === userIdWithMostPopularTrack
+      ),
+      track: mostPopularTrack,
+    }
+  })
+
+  const getUserWithLeastPopularTrack = computed(() => {
+    let userIdWithLeastPopularTrack = ""
+    let leastPopularTrack: any = null
+
+    playlist.value.forEach((track) => {
+      if (
+        track.track.popularity <
+        (leastPopularTrack ? leastPopularTrack.track.popularity : Infinity)
+      ) {
+        leastPopularTrack = track
+        userIdWithLeastPopularTrack = track.added_by.id
+      }
+    })
+
+    return {
+      user: usersData.value.find(
+        (user) => user.id === userIdWithLeastPopularTrack
+      ),
+      track: leastPopularTrack,
+    }
+  })
+
   return {
     getDisplayNameById,
     getTracksCountByUserId,
@@ -156,5 +200,7 @@ export const useSpotifyPlaylistDataHelper = () => {
     getUserIdWithLeastTracks,
     getUserWithLongestTrack,
     getUserWithShortestTrack,
+    getUserWithMostPopularTrack,
+    getUserWithLeastPopularTrack,
   }
 }

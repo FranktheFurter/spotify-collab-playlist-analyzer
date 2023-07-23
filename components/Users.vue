@@ -6,6 +6,8 @@ const {
   getUserIdWithLeastTracks,
   getUserWithLongestTrack,
   getUserWithShortestTrack,
+  getUserWithMostPopularTrack,
+  getUserWithLeastPopularTrack,
 } = useSpotifyPlaylistDataHelper()
 const { msToTime, msToTimeShort } = useFormatHelper()
 </script>
@@ -107,6 +109,52 @@ const { msToTime, msToTimeShort } = useFormatHelper()
         {{ getUserWithShortestTrack?.track?.track?.artists[0].name ?? "" }}
         with:
         {{ msToTimeShort(getUserWithShortestTrack?.track?.track?.duration_ms) }}
+      </p>
+    </div>
+    <div
+      v-if="
+        getUserWithMostPopularTrack &&
+        getUserWithMostPopularTrack.track &&
+        getUserWithMostPopularTrack.user &&
+        getUserWithMostPopularTrack.user.id
+      "
+      class="border-gray/40 border-solid border-rounded-xl p-2"
+    >
+      <h3>Mainstream Manfred:</h3>
+      <p>
+        {{
+          getUserWithMostPopularTrack
+            ? getDisplayNameById(getUserWithMostPopularTrack.user.id)
+            : "No user found"
+        }}
+        with:
+        {{ getUserWithMostPopularTrack?.track?.track?.name ?? "" }} by
+        {{ getUserWithMostPopularTrack?.track?.track?.artists[0].name ?? "" }}
+        with:
+        {{ getUserWithMostPopularTrack?.track?.track?.popularity }} popularity
+      </p>
+    </div>
+    <div
+      v-if="
+        getUserWithLeastPopularTrack &&
+        getUserWithLeastPopularTrack.track &&
+        getUserWithLeastPopularTrack.user &&
+        getUserWithLeastPopularTrack.user.id
+      "
+      class="border-gray/40 border-solid border-rounded-xl p-2"
+    >
+      <h3>Underground Uwe:</h3>
+      <p>
+        {{
+          getUserWithLeastPopularTrack
+            ? getDisplayNameById(getUserWithLeastPopularTrack.user.id)
+            : "No user found"
+        }}
+        with:
+        {{ getUserWithLeastPopularTrack?.track?.track?.name ?? "" }} by
+        {{ getUserWithLeastPopularTrack?.track?.track?.artists[0].name ?? "" }}
+        with:
+        {{ getUserWithLeastPopularTrack?.track?.track?.popularity }} popularity
       </p>
     </div>
   </div>
