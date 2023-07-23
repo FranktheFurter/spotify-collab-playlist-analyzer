@@ -47,7 +47,7 @@ export const useSpotifyPlaylistDataHelper = () => {
     return totalPopularity / userTracks.length
   }
   // more complex helpers that should return the full user Object + the corresponding data
-  const getUserIdWithMostTracks = computed(() => {
+  const getUserWithMostTracks = computed(() => {
     const userIdToTrackCountMap = playlist.value.reduce(
       (accumulator, track) => {
         if (accumulator[track.added_by.id]) {
@@ -105,7 +105,7 @@ export const useSpotifyPlaylistDataHelper = () => {
     }
   })
 
-  const getUserIdWithLongestTrack = computed(() => {
+  const getUserWithLongestTrack = computed(() => {
     let userIdWithLongestTrack = ""
     let longestTrack: any = null
 
@@ -125,7 +125,7 @@ export const useSpotifyPlaylistDataHelper = () => {
     }
   })
 
-  const getUserIdWithShortestTrack = computed(() => {
+  const getUserWithShortestTrack = computed(() => {
     let userIdWithShortestTrack = ""
     let shortestTrack: any = null
 
@@ -152,9 +152,9 @@ export const useSpotifyPlaylistDataHelper = () => {
     getTracksDurationInPercentageByUserId,
     getTotalPlaylistDuration,
     getAverageTrackPopularityByUserId,
-    getUserIdWithMostTracks,
+    getUserWithMostTracks,
     getUserIdWithLeastTracks,
-    getUserIdWithLongestTrack,
-    getUserIdWithShortestTrack,
+    getUserWithLongestTrack,
+    getUserWithShortestTrack,
   }
 }

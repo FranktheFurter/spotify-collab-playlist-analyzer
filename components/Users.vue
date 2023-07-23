@@ -2,10 +2,10 @@
 const { usersData } = useSpotifyPlaylistApi()
 const {
   getDisplayNameById,
-  getUserIdWithMostTracks,
+  getUserWithMostTracks,
   getUserIdWithLeastTracks,
-  getUserIdWithLongestTrack,
-  getUserIdWithShortestTrack,
+  getUserWithLongestTrack,
+  getUserWithShortestTrack,
 } = useSpotifyPlaylistDataHelper()
 const { msToTime, msToTimeShort } = useFormatHelper()
 </script>
@@ -27,21 +27,21 @@ const { msToTime, msToTimeShort } = useFormatHelper()
   <div class="container mx-auto grid grid-cols-2 lg:grid-cols-4 gap-4">
     <div
       v-if="
-        getUserIdWithMostTracks &&
-        getUserIdWithMostTracks.tracksCount &&
-        getUserIdWithMostTracks.user &&
-        getUserIdWithMostTracks.user.id
+        getUserWithMostTracks &&
+        getUserWithMostTracks.tracksCount &&
+        getUserWithMostTracks.user &&
+        getUserWithMostTracks.user.id
       "
       class="border-gray/40 border-solid border-rounded-xl p-2"
     >
       <h3>Most Tracks:</h3>
       <p>
         {{
-          getUserIdWithMostTracks
-            ? getDisplayNameById(getUserIdWithMostTracks.user.id)
+          getUserWithMostTracks
+            ? getDisplayNameById(getUserWithMostTracks.user.id)
             : "No user found"
         }}
-        with: {{ getUserIdWithMostTracks.tracksCount }} tracks
+        with: {{ getUserWithMostTracks.tracksCount }} tracks
       </p>
     </div>
     <div
@@ -65,52 +65,48 @@ const { msToTime, msToTimeShort } = useFormatHelper()
     </div>
     <div
       v-if="
-        getUserIdWithLongestTrack &&
-        getUserIdWithLongestTrack.track &&
-        getUserIdWithLongestTrack.user &&
-        getUserIdWithLongestTrack.user.id
+        getUserWithLongestTrack &&
+        getUserWithLongestTrack.track &&
+        getUserWithLongestTrack.user &&
+        getUserWithLongestTrack.user.id
       "
       class="border-gray/40 border-solid border-rounded-xl p-2"
     >
       <h3>Longest Track:</h3>
       <p>
         {{
-          getUserIdWithLongestTrack
-            ? getDisplayNameById(getUserIdWithLongestTrack.user.id)
+          getUserWithLongestTrack
+            ? getDisplayNameById(getUserWithLongestTrack.user.id)
             : "No user found"
         }}
         with:
-        {{ getUserIdWithLongestTrack?.track?.track?.name ?? "" }} by
-        {{ getUserIdWithLongestTrack?.track?.track?.artists[0].name ?? "" }}
+        {{ getUserWithLongestTrack?.track?.track?.name ?? "" }} by
+        {{ getUserWithLongestTrack?.track?.track?.artists[0].name ?? "" }}
         with:
-        {{
-          msToTimeShort(getUserIdWithLongestTrack?.track?.track?.duration_ms)
-        }}
+        {{ msToTimeShort(getUserWithLongestTrack?.track?.track?.duration_ms) }}
       </p>
     </div>
     <div
       v-if="
-        getUserIdWithShortestTrack &&
-        getUserIdWithShortestTrack.track &&
-        getUserIdWithShortestTrack.user &&
-        getUserIdWithShortestTrack.user.id
+        getUserWithShortestTrack &&
+        getUserWithShortestTrack.track &&
+        getUserWithShortestTrack.user &&
+        getUserWithShortestTrack.user.id
       "
       class="border-gray/40 border-solid border-rounded-xl p-2"
     >
       <h3>Shortest Track:</h3>
       <p>
         {{
-          getUserIdWithShortestTrack
-            ? getDisplayNameById(getUserIdWithShortestTrack.user.id)
+          getUserWithShortestTrack
+            ? getDisplayNameById(getUserWithShortestTrack.user.id)
             : "No user found"
         }}
         with:
-        {{ getUserIdWithShortestTrack?.track?.track?.name ?? "" }} by
-        {{ getUserIdWithShortestTrack?.track?.track?.artists[0].name ?? "" }}
+        {{ getUserWithShortestTrack?.track?.track?.name ?? "" }} by
+        {{ getUserWithShortestTrack?.track?.track?.artists[0].name ?? "" }}
         with:
-        {{
-          msToTimeShort(getUserIdWithShortestTrack?.track?.track?.duration_ms)
-        }}
+        {{ msToTimeShort(getUserWithShortestTrack?.track?.track?.duration_ms) }}
       </p>
     </div>
   </div>
