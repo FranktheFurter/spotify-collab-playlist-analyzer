@@ -46,7 +46,7 @@ export const useSpotifyPlaylistDataHelper = () => {
 
     return totalPopularity / userTracks.length
   }
-
+  // more complex helpers that should return the full user Object + the corresponding data
   const getUserIdWithMostTracks = computed(() => {
     const userIdToTrackCountMap = playlist.value.reduce(
       (accumulator, track) => {
@@ -60,7 +60,7 @@ export const useSpotifyPlaylistDataHelper = () => {
       {}
     )
 
-    let userIdWithMostTracks = null
+    let userIdWithMostTracks: string | null = null
     let mostTracks = 0
 
     for (const userId in userIdToTrackCountMap) {
@@ -70,7 +70,10 @@ export const useSpotifyPlaylistDataHelper = () => {
       }
     }
 
-    return userIdWithMostTracks
+    return {
+      user: usersData.value.find((user) => user.id === userIdWithMostTracks),
+      tracksCount: mostTracks,
+    }
   })
 
   const getUserIdWithLeastTracks = computed(() => {
@@ -86,7 +89,7 @@ export const useSpotifyPlaylistDataHelper = () => {
       {}
     )
 
-    let userIdWithLeastTracks = null
+    let userIdWithLeastTracks: string | null = null
     let leastTracks = Infinity
 
     for (const userId in userIdToTrackCountMap) {
@@ -96,34 +99,50 @@ export const useSpotifyPlaylistDataHelper = () => {
       }
     }
 
-    return userIdWithLeastTracks
+    return {
+      user: usersData.value.find((user) => user.id === userIdWithLeastTracks),
+      tracksCount: leastTracks,
+    }
   })
 
   const getUserIdWithLongestTrack = computed(() => {
     let userIdWithLongestTrack = ""
-    let longestTrackDuration = 0
+    let longestTrack: any = null
 
     playlist.value.forEach((track) => {
-      if (track.track.duration_ms > longestTrackDuration) {
-        longestTrackDuration = track.track.duration_ms
+      if (
+        track.track.duration_ms >
+        (longestTrack ? longestTrack.track.duration_ms : 0)
+      ) {
+        longestTrack = track
         userIdWithLongestTrack = track.added_by.id
       }
     })
 
-    return userIdWithLongestTrack
+    return {
+      user: usersData.value.find((user) => user.id === userIdWithLongestTrack),
+      track: longestTrack,
+    }
   })
+
   const getUserIdWithShortestTrack = computed(() => {
     let userIdWithShortestTrack = ""
-    let shortestTrackDuration = Infinity
+    let shortestTrack: any = null
 
     playlist.value.forEach((track) => {
-      if (track.track.duration_ms < shortestTrackDuration) {
-        shortestTrackDuration = track.track.duration_ms
+      if (
+        track.track.duration_ms <
+        (shortestTrack ? shortestTrack.track.duration_ms : Infinity)
+      ) {
+        shortestTrack = track
         userIdWithShortestTrack = track.added_by.id
       }
     })
 
-    return userIdWithShortestTrack
+    return {
+      user: usersData.value.find((user) => user.id === userIdWithShortestTrack),
+      track: shortestTrack,
+    }
   })
 
   return {
