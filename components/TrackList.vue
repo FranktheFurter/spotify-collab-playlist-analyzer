@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 const { playlist } = useSpotifyPlaylistApi()
-const { getDisplayNameById } = useSpotifyPlaylistDataHelper()
+const { getDisplayNameById, getUserById } = useSpotifyPlaylistDataHelper()
 
 const getArtistNames = (artists: any[]) => {
   return artists.map((artist: { name: any }) => artist.name).join(", ")
@@ -25,33 +25,19 @@ const getArtistNames = (artists: any[]) => {
         class="object-contain w-20 md:w-100% aspect-1/1"
       />
       <div
-        class="px-2 text-white/80 text-xs backdrop-blur-2xl border-solid border-white/20 w-100% md:w-unset"
+        class="px-2 text-white/80 text-xs backdrop-blur-2xl border-solid border-white/20 w-100% md:w-unset flex justify-between items-center py-4 gap-2"
       >
-        <p class="line-clamp-1">
-          {{ track.track.name }}
-        </p>
-        <p class="line-clamp-1">{{ getArtistNames(track.track.artists) }}</p>
+        <div>
+          <p class="line-clamp-1 my-0">
+            {{ track.track.name }}
+          </p>
+          <p class="line-clamp-1 my-0">
+            {{ getArtistNames(track.track.artists) }}
+          </p>
+        </div>
+        <CircleAvatarSmall :user-data="getUserById(track.added_by.id)" />
       </div>
     </div>
-    <!-- <div
-      v-for="(track, index) in playlist"
-      :key="index"
-      class="aspect-1/1 bg-gray/20 w-100%"
-    >
-      <nuxt-img
-        v-if="track.track.album.images && track.track.album.images[0]"
-        :src="track.track.album.images[0].url"
-        alt="cover"
-        loading="lazy"
-        class="object-contain w-100%"
-      />
-      <div class="p-2 text-white/80">
-        <p class="line-clamp-1">
-          {{ track.track.name }}
-        </p>
-        <p class="line-clamp-1">{{ getArtistNames(track.track.artists) }}</p>
-      </div>
-    </div> -->
   </div>
 </template>
 

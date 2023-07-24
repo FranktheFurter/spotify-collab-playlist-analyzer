@@ -12,6 +12,10 @@ export const useSpotifyPlaylistDataHelper = () => {
     const user = usersData.value.find((user) => user.id === userId)
     return user ? user.display_name : ""
   }
+  const getUserById = (userId: string) => {
+    const user = usersData.value.find((user) => user.id === userId)
+    return user ? user : null
+  }
 
   const getTracksCountByUserId = (userId: string) => {
     return playlist.value.filter((track) => track.added_by.id === userId).length
@@ -191,6 +195,7 @@ export const useSpotifyPlaylistDataHelper = () => {
 
   return {
     getDisplayNameById,
+    getUserById,
     getTracksCountByUserId,
     getTotalTrackDurationByUserId,
     getTracksDurationInPercentageByUserId,
