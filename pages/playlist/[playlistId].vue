@@ -9,8 +9,9 @@ const { getDisplayNameById } = useSpotifyPlaylistDataHelper()
   <div>
     <div class="">
       <PlaylistInfo />
-      <Users />
-      <div class="py-4">
+      <div class="container mx-auto flex flex-col gap-16">
+        <Users />
+        <UserAwards />
         <TrackList />
       </div>
     </div>

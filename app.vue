@@ -14,4 +14,7 @@ body {
   background-color: black;
   color: white;
 }
+.k-border {
+  @apply border-gray/33 hover:border-gray/66 hover:scale-102 border-solid border-rounded-xl duration-200;
+}
 </style>

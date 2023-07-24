@@ -22,10 +22,7 @@ const formattedDuration = computed(() => msToTime(duration))
 </script>
 
 <template>
-  <div
-    v-if="userData"
-    class="flex flex-col items-center gap-1 border-gray/20 border-solid border-rounded-xl p-4"
-  >
+  <div v-if="userData" class="flex flex-col items-center gap-1 k-border p-4">
     <img
       v-if="userData.images && userData.images.length > 0"
       class="rounded-full"
