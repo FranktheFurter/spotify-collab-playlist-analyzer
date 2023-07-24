@@ -16,11 +16,7 @@ export default defineConfig({
   ],
   theme: {
     colors: {
-      brand: {
-        primary: "#025388",
-        light: "#5ebbff",
-        dark: "#0081df",
-      },
+      primary: "#1CD760",
     },
   },
   presets: [

@@ -15,6 +15,6 @@ body {
   color: white;
 }
 .k-border {
-  @apply border-gray/33 hover:border-gray/66 border-solid border-rounded-xl duration-200;
+  @apply border-gray/33 hover:border-primary/100 border-solid border-rounded-xl duration-200;
 }
 </style>
