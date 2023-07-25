@@ -1,7 +1,11 @@
 <script lang="ts" setup></script>
 
 <template>
-  <h1>Landing</h1>
+  <input
+    type="text"
+    placeholder="Playlist Id"
+    class="border-none bg-transparent text-lg text-white focus:outline-none rounded-md bg-gray-50/10 p-2 k-border"
+  />
   <NuxtLink to="/playlist/0zsrKYsMTsy2Iktc6epKOc">
     <button class="btn">Feldzug West</button>
   </NuxtLink>
