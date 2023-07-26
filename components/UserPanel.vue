@@ -25,7 +25,7 @@ const formattedDuration = computed(() => msToTime(duration))
   <div v-if="userData" class="flex flex-col items-center gap-1 k-border p-4">
     <img
       v-if="userData.images && userData.images.length > 0"
-      class="rounded-full border-gray/66 border-solid"
+      class="rounded-full border-gray/66 border-solid border-2"
       :src="userData.images[0].url"
       alt="User profile image"
       width="60"
@@ -33,7 +33,7 @@ const formattedDuration = computed(() => msToTime(duration))
     />
     <div
       v-else
-      class="w-60px h-60px rounded-full flex items-center justify-center text-white border-gray/66 border-solid"
+      class="w-60px h-60px rounded-full flex items-center justify-center text-white border-gray/66 border-solid border-2"
     >
       {{ userData.display_name.slice(0, 3) }}
     </div>

@@ -17,7 +17,7 @@ const props = defineProps({
     />
     <div
       v-else
-      class="w-30px h-30px rounded-full flex items-center justify-center text-white border-gray/66 border-solid text-2.25"
+      class="w-30px h-30px rounded-full flex items-center justify-center text-white border-gray/66 border-solid text-2.25 border-2"
     >
       {{ userData.display_name.slice(0, 3) }}
     </div>
