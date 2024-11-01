@@ -20,18 +20,23 @@ export const useSpotifyPlaylistSearch = () => {
         await getAccessToken()
       }
 
-      const config = {
-        method: "get",
-        url: `https://api.spotify.com/v1/search?q=${encodeURIComponent(
+      const response = await fetch(
+        `https://api.spotify.com/v1/search?q=${encodeURIComponent(
           query
         )}&type=playlist&limit=50`,
-        headers: {
-          Authorization: `Bearer ${token.value}`,
-        },
+        {
+          headers: {
+            Authorization: `Bearer ${token.value}`,
+          },
+        }
+      )
+
+      if (!response.ok) {
+        throw new Error(`Spotify API error: ${response.statusText}`)
       }
 
-      const response = await axios(config)
-      searchResults.value = response.data.playlists.items
+      const data = await response.json()
+      searchResults.value = data.playlists.items || []
     } catch (error) {
       console.error("Error searching playlists:", error)
       searchResults.value = []
